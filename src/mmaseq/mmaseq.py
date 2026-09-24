@@ -404,7 +404,7 @@ def create_command(threads,
     if force:
         additionals += "--forceall "
            
-    target_rule = "copy "
+    target_rule = "table "
     
     if clean:
         target_rule = "clean "
