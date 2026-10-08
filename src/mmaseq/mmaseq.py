@@ -72,6 +72,17 @@ def parse_mmaseq():
     )
 
     parser.add_argument(
+        "--latency_wait",
+        dest="latency_wait",
+        type=int,
+        default=60,
+        help=(
+            "Seconds to wait for output files to appear after a job finishes. "
+            "Increase on slow or network file systems. (Default: %(default)s)"
+        )
+    )
+
+    parser.add_argument(
         "--resolve",
         dest="resolve",
         action="store_true",
@@ -400,12 +411,14 @@ def create_command(threads,
                    conda_dir,
                    force,
                    clean,
+                   latency_wait,
                    arguments = None):
     logger.trace(("create_command(\n"
                   f"config_file={config_file}\n"
                   f"conda_dir={conda_dir}\n"
                   f"force={force}\n"
                   f"clean={clean}\n"
+                  f"latency_wait={latency_wait}\n"
                   f"arguments={arguments})"))
 
     # Define arguments and rules as a single string
@@ -423,6 +436,7 @@ def create_command(threads,
         f"--cores {threads} "
         "--keep-going "
         "--rerun-incomplete "
+        f"--latency-wait {latency_wait} "
         f"--configfile {config_file} "
         f"--snakefile {SNAKEFILE} "
         f"--conda-prefix {conda_dir} "
@@ -515,7 +529,8 @@ def mmaseq(args):
                              config_file, 
                              conda_dir,
                              force,
-                             clean
+                             clean,
+                             args.latency_wait
                              )
 
     logger.info(

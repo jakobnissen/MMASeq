@@ -102,6 +102,10 @@ def generate_long_results(samples):
         for file in files:
             mod = file.parent.name
 
+            if not file.exists():
+                print(f"Results file {file.name} for {sample_name} is missing. Skipping!")
+                continue
+
             try:
                 sample_results = pd.read_csv(file, sep = "\t", index_col = False)
             except pd.errors.EmptyDataError:
