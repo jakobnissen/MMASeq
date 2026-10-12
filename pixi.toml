@@ -1,0 +1,22 @@
+[workspace]
+authors = ["Jakob Nybo Andersen <jakobnybonissen@gmail.com>"]
+channels = ["conda-forge", "bioconda"]
+name = "mmaseq"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = ">=3.13"
+snakemake = ">=9.27.0,<10"
+pandas = ">=2.3.3,<3"
+conda = ">=26.7.3,<27"
+
+[pypi-dependencies]
+mmaseq = { path = ".", editable = true }
+
+[activation.env]
+# Workaround: serovar_detector <= 1.1.4 has an env file without `channels:`, which
+# fails with Pixi's conda since it has no channels configured by default.
+CONDA_CHANNELS = "conda-forge,bioconda"
