@@ -2,4 +2,4 @@ name: virulencefinder
 channels:
   - conda-forge
 dependencies:
-  - bioconda::virulencefinder
+  - bioconda::virulencefinder==3.2.1

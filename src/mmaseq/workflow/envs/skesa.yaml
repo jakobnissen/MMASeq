@@ -2,4 +2,4 @@ name: skesa
 channels:
   - conda-forge
 dependencies:
-  - bioconda::skesa
+  - bioconda::skesa==2.5.1

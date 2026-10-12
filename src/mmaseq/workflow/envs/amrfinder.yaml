@@ -2,4 +2,4 @@ name: ncbi-amrfinderplus
 channels:
   - conda-forge
 dependencies:
-  - bioconda::ncbi-amrfinderplus
+  - bioconda::ncbi-amrfinderplus==4.2.7

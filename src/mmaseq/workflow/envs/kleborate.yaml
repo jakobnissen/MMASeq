@@ -2,5 +2,7 @@ name: kleborate
 channels:
   - conda-forge
 dependencies:
-  - bioconda::kleborate<3.3.0b1
-  - bioconda::ezclermont
+  - bioconda::kleborate==3.2.4
+  # Not used by MMASeq directly, but required at runtime by Kleborate's
+  # `--preset escherichia`, and not declared as a dependency by the kleborate recipe.
+  - bioconda::ezclermont==1.0.0

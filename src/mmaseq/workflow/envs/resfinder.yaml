@@ -2,4 +2,4 @@ name: resfinder
 channels:
   - conda-forge
 dependencies:
-  - bioconda::resfinder
+  - bioconda::resfinder==4.7.2

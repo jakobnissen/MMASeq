@@ -2,9 +2,9 @@ name: serovar_detector
 channels:
   - conda-forge
 dependencies:
-  - bioconda::serovar_detector>1.1.4
-  - bioconda::blast
-  - bioconda::kma
-  - conda-forge::r-essentials
-  - conda-forge::r-logger
-  - conda-forge::r-yaml
+  - bioconda::serovar_detector==1.1.7
+  - bioconda::blast==2.17.0
+  - bioconda::kma==1.6.18
+  - conda-forge::r-essentials==4.5
+  - conda-forge::r-logger==0.4.3
+  - conda-forge::r-yaml==2.3.12
