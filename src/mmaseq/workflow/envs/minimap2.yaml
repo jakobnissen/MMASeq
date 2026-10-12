@@ -2,4 +2,4 @@ name: minimap2
 channels:
   - conda-forge
 dependencies:
-  - bioconda::minimap2
+  - bioconda::minimap2==2.31

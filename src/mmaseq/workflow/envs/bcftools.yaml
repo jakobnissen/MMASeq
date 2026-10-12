@@ -2,4 +2,4 @@ name: bcftools
 channels:
   - conda-forge
 dependencies:
-  - bioconda::bcftools
+  - bioconda::bcftools==1.24

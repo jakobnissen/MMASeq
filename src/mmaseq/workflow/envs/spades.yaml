@@ -2,4 +2,4 @@ name: spades
 channels:
   - conda-forge
 dependencies:
-  - bioconda::spades
+  - bioconda::spades==4.3.0

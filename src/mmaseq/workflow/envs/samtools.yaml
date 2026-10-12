@@ -2,4 +2,4 @@ name: samtools
 channels:
   - conda-forge
 dependencies:
-  - bioconda::samtools
+  - bioconda::samtools==1.24
