@@ -65,6 +65,7 @@ rule versions:
 
 
 rule copy:
+    default_target: True
     input:
         raw = raw_files,
         versions_file = rules.versions.output.versions_file
