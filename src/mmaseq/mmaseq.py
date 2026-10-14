@@ -3,8 +3,7 @@
 from .__version__ import __version__
 from .utils.PATH import *
 from .utils.logging_setup import initiate_log, adjust_log
-from .utils.classes import import_dataset, list_files
-from .utils.results import generate_long_results, module_statuses
+from .utils.classes import ResultsAggregator, import_dataset, list_files
 
 import argparse
 from pathlib import Path
@@ -544,7 +543,8 @@ def mmaseq(args):
     )
     run_status = execute_snakemake(command)
 
-    module_statuses(samples, outdir)
+    results_aggregator = ResultsAggregator(samples)
+    results_aggregator.module_statuses(outdir)
 
     # Checked before creating the long table, as missing results from a failed
     # run would otherwise make that crash and hide the actual error
@@ -554,7 +554,7 @@ def mmaseq(args):
 
     if longtable:
         long_file = outdir / "MMAseq_long.tsv"
-        long = generate_long_results(samples)
+        long = results_aggregator.generate_long_results()
 
         logger.info(f"Creating long table output to: {long_file}")
         long.to_csv(long_file, sep = "\t", index = False)
