@@ -13,6 +13,7 @@ import pandas as pd
 from datetime import datetime
 import yaml
 import subprocess
+import multiprocessing
 
 
 def parse_mmaseq():
@@ -63,7 +64,7 @@ def parse_mmaseq():
     parser.add_argument(
         "--threads",
         dest="threads",
-        default=4,
+        default=max(multiprocessing.cpu_count() - 1, 2)
         help=(
             "Amount of threads (cores) to dedicate for executing the pipeline. "
             "(Default: %(default)s)"
