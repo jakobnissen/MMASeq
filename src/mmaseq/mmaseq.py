@@ -64,7 +64,7 @@ def parse_mmaseq():
     parser.add_argument(
         "--threads",
         dest="threads",
-        default=max(multiprocessing.cpu_count() - 1, 2)
+        default=max(multiprocessing.cpu_count() - 1, 2),
         help=(
             "Amount of threads (cores) to dedicate for executing the pipeline. "
             "(Default: %(default)s)"
