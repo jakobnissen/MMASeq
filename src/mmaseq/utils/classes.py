@@ -179,14 +179,14 @@ class Sample:
             if rds and read_type:
                 read_str = f"{read_type}/"
 
-            module_dir = f"{read_str}{module}"
-            
+            module_dir = f"{read_str}/{module}".lstrip("/")
+
             raw = None
             results = None
             if not ignr:
-                raw = [self.rawdir / module_dir / f"{module}{ext}" for ext in exts]
-                results = [self.outdir / module_dir / f"{module}{ext}" for ext in exts]
-
+                raw = [self.rawdir / module_dir / f"{module}{ext}".lstrip("/") for ext in exts]
+                results = [self.outdir / f"{module}{ext}".lstrip("/") for ext in exts]
+            
             mod = Module(
                 name = module,
                 options = opt,
@@ -241,13 +241,14 @@ class ResultsAggregator:
 
                 succeeded = module.status()
                 statuses.append(succeeded)
-                module_statuses.append({
-                    "sample": sample_name,
-                    "module": {
-                        "name": module_name,
-                        "status": "Succeeded" if succeeded else "Missing",
-                    },
-                })
+                if not succeeded:
+                    module_statuses.append({
+                        "sample": sample_name,
+                        "module": {
+                            "name": module_name,
+                            "status": "Failed",
+                        },
+                    })
 
         module_status_file = outdir / "module_status.tsv"
         pd.DataFrame(module_statuses).to_csv(
@@ -257,6 +258,7 @@ class ResultsAggregator:
         )
 
         if not all(statuses):
+            print("The following samples showed module failures:")
             for status_info in module_statuses:
                 module = status_info["module"]
                 print(f"{status_info['sample']} - {module['name']}: {module['status']}")
