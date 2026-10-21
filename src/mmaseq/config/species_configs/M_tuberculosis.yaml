@@ -1,5 +1,5 @@
 plasmidfinder:
-  options: "-l 80 -t 80"
+  options: "-l 0.80 -t 0.80"
   assembler: shovill
 
 blastn:
