@@ -44,7 +44,7 @@ logger.debug("Creating sample specific input and output objects")
 logger.trace("Reading samplesheet")
 
 logger.trace("Generating Sample class objects")
-samples = import_dataset(samplesheet_path, species_configs, outdir)
+samples = import_dataset(samplesheet_path, species_configs, outdir, ignore_assemblies)
 
 logger.trace("Determining output files")
 raw_files = list_files(samples, raw = True)
