@@ -159,7 +159,7 @@ class Sample:
         for module, components in configs_raw.items():
             opt = components.get("options", "")
             db = as_list(components.get("database"))
-            if self.assembly and not ignore_assemblies:
+            if self.assembly() and not ignore_assemblies:
                 asm = ["UnkwnAsmblr"]
             else:
                 asm = as_list(components.get("assembler"))
