@@ -142,7 +142,7 @@ class Sample:
         return all_results
 
 
-    def populate_modules(self):
+    def populate_modules(self, ignore_assemblies):
         modules = {}
 
         static_fields = [
@@ -159,7 +159,10 @@ class Sample:
         for module, components in configs_raw.items():
             opt = components.get("options", "")
             db = as_list(components.get("database"))
-            asm = as_list(components.get("assembler"))
+            if self.assembly and not ignore_assembly:
+                asm = ["UnkwnAsmblr"]
+            else:
+                asm = as_list(components.get("assembler"))
             ignr = components.get("ignore", False)
             rds = components.get("reads", False)
 
@@ -391,7 +394,7 @@ def determine_outfile_exts(reads, database, assembly):
     return [f"{asm}.tsv" for asm in asm_strings]
 
 
-def import_dataset(samplesheet_path, config_dir, outpath):
+def import_dataset(samplesheet_path, config_dir, outpath, ignore_assemblies):
 
     samplesheet = pd.read_csv(
         samplesheet_path,
@@ -411,7 +414,7 @@ def import_dataset(samplesheet_path, config_dir, outpath):
         if not config_file.exists():
             raise FileNotFoundError(f"Configuration file not found - Check your samplesheet: {config_file}.")
 
-        smpl = Sample(name = sample, config_file = config_file, inputs = Input(read1, read2, assembly), outdir = outpath / sample).populate_modules()
+        smpl = Sample(name = sample, config_file = config_file, inputs = Input(read1, read2, assembly), outdir = outpath / sample).populate_modules(ignore_assemblies)
 
         samples.update({sample: smpl})
 
