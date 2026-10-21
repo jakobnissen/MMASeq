@@ -13,12 +13,12 @@ class Input:
     config: str = "default.yaml"
 
     def __post_init__(self):
-        if not self.read1:
+        if pd.isnull(self.read1):
             self.read1 = None
         else:
             self.read1 = Path(self.read1)
 
-        if not self.read2:
+        if pd.isnull(self.read2):
             self.read2 = None
         else:
             self.read2 = Path(self.read2)
@@ -142,7 +142,7 @@ class Sample:
         return all_results
 
 
-    def populate_modules(self):
+    def populate_modules(self, ignore_assemblies):
         modules = {}
 
         static_fields = [
@@ -159,7 +159,10 @@ class Sample:
         for module, components in configs_raw.items():
             opt = components.get("options", "")
             db = as_list(components.get("database"))
-            asm = as_list(components.get("assembler"))
+            if self.assembly() and not ignore_assemblies:
+                asm = ["UnkwnAsmblr"]
+            else:
+                asm = as_list(components.get("assembler"))
             ignr = components.get("ignore", False)
             rds = components.get("reads", False)
 
@@ -179,14 +182,14 @@ class Sample:
             if rds and read_type:
                 read_str = f"{read_type}/"
 
-            module_dir = f"{read_str}{module}"
-            
+            module_dir = f"{read_str}/{module}".lstrip("/")
+
             raw = None
             results = None
             if not ignr:
-                raw = [self.rawdir / module_dir / f"{module}{ext}" for ext in exts]
-                results = [self.outdir / module_dir / f"{module}{ext}" for ext in exts]
-
+                raw = [self.rawdir / module_dir / f"{module}{ext}".lstrip("/") for ext in exts]
+                results = [self.outdir / f"{module}{ext}".lstrip("/") for ext in exts]
+            
             mod = Module(
                 name = module,
                 options = opt,
@@ -241,13 +244,14 @@ class ResultsAggregator:
 
                 succeeded = module.status()
                 statuses.append(succeeded)
-                module_statuses.append({
-                    "sample": sample_name,
-                    "module": {
-                        "name": module_name,
-                        "status": "Succeeded" if succeeded else "Missing",
-                    },
-                })
+                if not succeeded:
+                    module_statuses.append({
+                        "sample": sample_name,
+                        "module": {
+                            "name": module_name,
+                            "status": "Failed",
+                        },
+                    })
 
         module_status_file = outdir / "module_status.tsv"
         pd.DataFrame(module_statuses).to_csv(
@@ -257,6 +261,7 @@ class ResultsAggregator:
         )
 
         if not all(statuses):
+            print("The following samples showed module failures:")
             for status_info in module_statuses:
                 module = status_info["module"]
                 print(f"{status_info['sample']} - {module['name']}: {module['status']}")
@@ -389,7 +394,7 @@ def determine_outfile_exts(reads, database, assembly):
     return [f"{asm}.tsv" for asm in asm_strings]
 
 
-def import_dataset(samplesheet_path, config_dir, outpath):
+def import_dataset(samplesheet_path, config_dir, outpath, ignore_assemblies):
 
     samplesheet = pd.read_csv(
         samplesheet_path,
@@ -409,7 +414,7 @@ def import_dataset(samplesheet_path, config_dir, outpath):
         if not config_file.exists():
             raise FileNotFoundError(f"Configuration file not found - Check your samplesheet: {config_file}.")
 
-        smpl = Sample(name = sample, config_file = config_file, inputs = Input(read1, read2, assembly), outdir = outpath / sample).populate_modules()
+        smpl = Sample(name = sample, config_file = config_file, inputs = Input(read1, read2, assembly), outdir = outpath / sample).populate_modules(ignore_assemblies)
 
         samples.update({sample: smpl})
 

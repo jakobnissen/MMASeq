@@ -113,7 +113,7 @@ rule mlst:
         options = lambda wc: sample(wc).options("mlst")
     output:
         results = f"{outdir}/{{sample}}/raw/mlst/mlst_{{assembler}}.tsv",
-        mlst_tmp = temp(f"%s/{{sample}}/raw/mlst/mlst_{{assembler}}.tmp")
+        mlst_tmp = temp(f"{outdir}/{{sample}}/raw/mlst/mlst_{{assembler}}.tmp")
     conda:
         ENVS_DIR / "mlst.yaml"
     log:
