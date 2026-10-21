@@ -312,7 +312,7 @@ rule plasmidfinder:
         """
         OUTDIR=$(dirname {output.results})
 
-        cmd="plasmidfinder.py -i {input.assembly} -o $OUTDIR -p {input.database} -x"
+        cmd="plasmidfinder.py -i {input.assembly} -o $OUTDIR -p {input.database} -x {params.options}"
 
         echo "Executing command:\n$cmd\n" > {log.stdout} 2>&1
         eval $cmd >> {log.stdout} 2>&1     
