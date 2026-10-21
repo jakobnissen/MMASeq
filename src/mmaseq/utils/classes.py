@@ -13,12 +13,12 @@ class Input:
     config: str = "default.yaml"
 
     def __post_init__(self):
-        if not self.read1:
+        if pd.isnull(self.read1):
             self.read1 = None
         else:
             self.read1 = Path(self.read1)
 
-        if not self.read2:
+        if pd.isnull(self.read2):
             self.read2 = None
         else:
             self.read2 = Path(self.read2)
