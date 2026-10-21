@@ -519,7 +519,7 @@ def mmaseq(args):
                            args.verbosity
                            )
 
-    samples = import_dataset(samplesheet_file, species_configs, outdir)
+    samples = import_dataset(samplesheet_file, species_configs, outdir, ignore_assemblies)
 
     if ignore_assemblies or force:
         logger.info("Assemblies in samplesheet will not replace "
