@@ -5,6 +5,7 @@ from .utils.PATH import *
 from .utils.logging_setup import initiate_log, adjust_log
 
 import argparse
+import multiprocessing
 import subprocess
 import sys
 import collections
@@ -110,10 +111,10 @@ def parse_deploy():
     parser.add_argument(
         "--threads",
         dest="threads",
-        default=4,
+        default=max(multiprocessing.cpu_count() - 1, 2),
         help=(
             "Amount of threads (cores) to dedicate for executing the pipeline. "
-            "(Default: %(default)s)"
+            "Default behavior is all threads minus one (minimal of 2) (Default: %(default)s)"
         )
     )
 
