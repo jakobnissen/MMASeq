@@ -5,6 +5,7 @@ from .utils.PATH import *
 from .utils.logging_setup import initiate_log, adjust_log
 
 import argparse
+import multiprocessing
 import subprocess
 import sys
 import collections
