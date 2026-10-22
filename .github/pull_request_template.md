@@ -1,7 +1,10 @@
-Please go to the `Preview` tab and select the appropriate sub-template before subitting your Pull request:
+## Select a pull request template
 
-* [Repository changes](?expand=1&template=.github/PR_build.md): Used for changes to repo and documentation but not the code itself
-* [Patches and bugfixes](?expand=1&template=.github/PR_patch.md): Used for resloving bugs and introducting optimizations of existing code
-* [Addition of new modules and features](?expand=1&template=.github/PR_add.md): Used for adding new analysis module and other features
+Choose the appropriate template:
 
+- [🔨 Build](?template=build.md) Changes to the repository setup and github actions (doesn't affect the software)
+- [🩹 Patch](?template=patch.md) Bug fixes and small corrections
+- [🕹️ Minor](?template=minor.md) Addition of new features or alterations to the functionality of existing features
+
+Select a link to open a pull request using that template.
 Thank you for your contribution!
