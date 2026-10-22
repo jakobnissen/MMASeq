@@ -6,6 +6,7 @@ from .utils.logging_setup import initiate_log, adjust_log
 from .utils.classes import ResultsAggregator, import_dataset, list_files
 
 import argparse
+import multiprocessing
 from pathlib import Path
 import sys
 import re
@@ -13,8 +14,6 @@ import pandas as pd
 from datetime import datetime
 import yaml
 import subprocess
-import multiprocessing
-
 
 def parse_mmaseq():
     # Define command line arguments
