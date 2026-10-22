@@ -1,10 +1,7 @@
-## Select a pull request template
+Please go to the `Preview` tab and select the appropriate sub-template before subitting your Pull request:
 
-Choose the appropriate template:
+* [Repository changes](?expand=1&template=.github/PR_build.md): Used for changes to repo and documentation but not the code itself
+* [Patches and bugfixes](?expand=1&template=.github/PR_patch.md): Used for resloving bugs and introducting optimizations of existing code
+* [Addition of new modules and features](?expand=1&template=.github/PR_add.md): Used for adding new analysis module and other features
 
-- [🔨 Build](https://github.com/ssi-dk/MMASeq/compare/dev...HEAD?quick_pull=1&template=build.md&title=BUILD%3A+&labels=build) Changes to the repository setup and github actions (doesn't affect the software)
-- [🩹 Patch](?template=PULL_REQUEST_TEMPLATE/patch.md) Bug fixes and small corrections
-- [🕹️ Minor](?template=.github/PULL_REQUEST_TEMPLATE/minor.md) Addition of new features or alterations to the functionality of existing features
-
-Select a link to open a pull request using that template.
 Thank you for your contribution!
