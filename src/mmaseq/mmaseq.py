@@ -547,18 +547,18 @@ def mmaseq(args):
     results_aggregator = ResultsAggregator(samples)
     results_aggregator.module_statuses(outdir)
 
-    # Checked before creating the long table, as missing results from a failed
-    # run would otherwise make that crash and hide the actual error
-    if run_status != 0:
-        logger.error("Something went wrong while executing snakemake.")
-        sys.exit(1)
-
+    # Created before checking the Snakemake exit status, so the results of the
+    # modules that succeeded are still collected when others failed
     if longtable:
         long_file = outdir / "MMAseq_long.tsv"
         long = results_aggregator.generate_long_results()
 
         logger.info(f"Creating long table output to: {long_file}")
         long.to_csv(long_file, sep = "\t", index = False)
+
+    if run_status != 0:
+        logger.error("Something went wrong while executing snakemake.")
+        sys.exit(1)
 
 
 
