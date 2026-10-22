@@ -14,20 +14,17 @@ class Input:
     config: str = "default.yaml"
 
     def __post_init__(self):
-        if pd.isnull(self.read1):
-            self.read1 = None
-        else:
-            self.read1 = Path(self.read1)
+        for attr in ("read1", "read2", "assembly"):
+            value = getattr(self, attr)
 
-        if pd.isnull(self.read2):
-            self.read2 = None
-        else:
-            self.read2 = Path(self.read2)
+            if not pd.isnull(value):
+                if Path(value).exists():
+                    setattr(self, attr, Path(value))
+                    continue
 
-        if pd.isnull(self.assembly):
-            self.assembly = None
-        else:
-            self.assembly = Path(self.assembly)
+
+            setattr(self, attr, None)
+
 
     @property
     def read_type(self) -> str | None:
