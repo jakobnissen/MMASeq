@@ -3,6 +3,7 @@ from pathlib import Path
 from yaml import safe_load
 import pandas as pd
 from itertools import product
+from .logging_setup import initiate_log
 
 
 @dataclass
@@ -13,20 +14,17 @@ class Input:
     config: str = "default.yaml"
 
     def __post_init__(self):
-        if pd.isnull(self.read1):
-            self.read1 = None
-        else:
-            self.read1 = Path(self.read1)
+        for attr in ("read1", "read2", "assembly"):
+            value = getattr(self, attr)
 
-        if pd.isnull(self.read2):
-            self.read2 = None
-        else:
-            self.read2 = Path(self.read2)
+            if not pd.isnull(value):
+                if Path(value).exists():
+                    setattr(self, attr, Path(value))
+                    continue
 
-        if pd.isnull(self.assembly):
-            self.assembly = None
-        else:
-            self.assembly = Path(self.assembly)
+
+            setattr(self, attr, None)
+
 
     @property
     def read_type(self) -> str | None:
@@ -285,6 +283,7 @@ class ResultsAggregator:
             the expected columns.
         """
         long_results = []
+        missing_files = []
 
         for sample_name, sample in self.samples.items():
             for module_name, module in sample.modules.items():
@@ -292,6 +291,12 @@ class ResultsAggregator:
                     continue
 
                 for file in module.results:
+                    # Results from failed jobs are missing, as Snakemake is run
+                    # with --keep-going and the table is made despite failures
+                    if not file.exists():
+                        missing_files.append(f"{sample_name}: {file.name}")
+                        continue
+
                     try:
                         sample_results = pd.read_csv(file, sep="\t", index_col=False)
                     except pd.errors.EmptyDataError:
@@ -317,6 +322,12 @@ class ResultsAggregator:
                         )
 
                     long_results.append(sample_long)
+
+        if missing_files:
+            logger.warning(
+                f"Skipping {len(missing_files)} missing results file(s):\n - "
+                + "\n - ".join(missing_files)
+            )
 
         if not long_results:
             return pd.DataFrame(
@@ -442,3 +453,7 @@ def list_files(samples, raw = False):
                 files.append(res_file)
 
     return files
+
+
+# Shares the launcher's logger, as only that has handlers attached
+logger = initiate_log("MMAseq")
