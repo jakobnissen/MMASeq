@@ -3,4 +3,4 @@ channels:
   - conda-forge
 dependencies:
   - bioconda::kma==1.6.18
-  - conda-forge::curl==8.22.0
+  - conda-forge::curl==8.23.0
